@@ -2,7 +2,7 @@
 
 using BenchmarkDotNet.Running;
 
-namespace ConsoleApp
+namespace Benchmark
 {
     public sealed class Program
     {

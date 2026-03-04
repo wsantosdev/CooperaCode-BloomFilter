@@ -2,7 +2,7 @@
 using BloomFilter;
 using WebCrawler;
 
-namespace ConsoleApp
+namespace Benchmark
 {
     [MemoryDiagnoser]
     public class WebCrawlerBenchmark

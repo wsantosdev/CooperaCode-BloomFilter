@@ -1,4 +1,4 @@
-namespace ConsoleApp;
+namespace WebCrawler;
 
 public sealed class UrlGenerator
 {
