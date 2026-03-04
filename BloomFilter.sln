@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36908.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomFilter", "BloomFilter\BloomFilter.csproj", "{51B959D6-7C61-4B23-8148-AF32A6FACF8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomFilter", "src\BloomFilter\BloomFilter.csproj", "{51B959D6-7C61-4B23-8148-AF32A6FACF8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{52D9F16C-799B-442B-A08D-AA6E5F26CACC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "src\ConsoleApp\ConsoleApp.csproj", "{52D9F16C-799B-442B-A08D-AA6E5F26CACC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCrawler", "WebCrawler\WebCrawler.csproj", "{12FBB66D-97CE-4DAB-AE8E-F270DBAA7D14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCrawler", "src\WebCrawler\WebCrawler.csproj", "{12FBB66D-97CE-4DAB-AE8E-F270DBAA7D14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomFilterTests", "BloomFilterTests\BloomFilterTests.csproj", "{BA9068F7-0053-4FEA-B577-5D630CF39C88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomFilterTests", "test\BloomFilterTests\BloomFilterTests.csproj", "{BA9068F7-0053-4FEA-B577-5D630CF39C88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
