@@ -1,5 +1,4 @@
 ﻿using BloomFilter;
-using ConsoleApp;
 using WebCrawler;
 
 namespace BloomFilterTests
@@ -30,11 +29,14 @@ namespace BloomFilterTests
             Assert.True(absentItemCount * 1 / 100 > falsePositiveCount);
         }
 
-        [Fact]
-        public void Should_Not_Have_False_Negatives()
+        [Theory]
+        [InlineData(100)]
+        [InlineData(1_000)]
+        [InlineData(10_000)]
+        [InlineData(100_000)]
+        public void Should_Not_Have_False_Negatives(int itemCount)
         {
             //Arrange
-            int itemCount = 10_000;
             var urls = UrlGenerator.Generate(itemCount);
 
             var filter = new CountingBloomFilter(itemCount, 3, MurmurHashAlgorithm.Create());
@@ -42,15 +44,14 @@ namespace BloomFilterTests
             crawler.Rastrear(urls);
 
             //Act
-            var falseNegativeCount = 0;
-            for (var i = 0; i < itemCount; i++)
+            foreach (var url in urls)
             {
-                if (!crawler.JaVisitou(urls[i]))
-                    falseNegativeCount++;
+                filter.Add(url);
             }
 
             //Assert
-            Assert.Equal(0, falseNegativeCount);
+            var foundAll = urls.All(crawler.JaVisitou);
+            Assert.True(foundAll);
         }
 
         [Fact]
