@@ -5,6 +5,8 @@ namespace BloomFilter
 {
     public sealed class MurmurHashAlgorithm : IHashAlgorithm
     {
+        private MurmurHashAlgorithm() { }
+
         public uint Hash(ref ReadOnlySpan<byte> data) =>
             MurmurHash3.Hash32(ref data, 360u);
                 

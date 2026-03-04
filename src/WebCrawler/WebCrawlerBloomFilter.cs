@@ -1,17 +1,14 @@
-﻿using BloomFilter;
+﻿using Bloom = BloomFilter;
 
 namespace WebCrawler
 {
-    public sealed class WebCrawlerSolucao(CountingBloomFilter filter)
+    public sealed class WebCrawlerBloomFilter(Bloom.BloomFilter filter)
     {
         public bool JaVisitou(string url) =>
             filter.ProbablyContains(url);
 
         public void MarcarVisitada(string url) =>
             filter.Add(url);
-
-        public void RemoverVisita(string url) =>
-            filter.Remove(url);
 
         public void Rastrear(List<string> urls)
         {

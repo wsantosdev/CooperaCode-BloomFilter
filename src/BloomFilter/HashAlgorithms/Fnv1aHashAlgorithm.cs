@@ -7,6 +7,8 @@ namespace BloomFilter
         private const uint FNVOffsetBasis = 0x811C9DC5; // 2166136261
         private const uint FNVPrime = 0x01000193; // 16777619
 
+        private Fnv1aHashAlgorithm() { }
+
         public uint Hash(ref ReadOnlySpan<byte> data)
         {
             uint hash = FNVOffsetBasis;

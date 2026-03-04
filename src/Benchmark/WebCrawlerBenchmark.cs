@@ -1,13 +1,14 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BloomFilter;
+using Bloom = BloomFilter;
 using WebCrawler;
+using BloomFilter;
 
 namespace Benchmark
 {
     [MemoryDiagnoser]
     public class WebCrawlerBenchmark
     {
-        private const int ItemCount = 100_000;
+        private const int ItemCount = 10_000;
         private List<string> _urls = null!;
 
         [GlobalSetup]
@@ -24,26 +25,50 @@ namespace Benchmark
         }
 
         [Benchmark]
-        public void Murmur()
+        public void Bloom_Murmur()
+        {
+            var filter = new Bloom.BloomFilter(ItemCount, hashAlgorithm: MurmurHashAlgorithm.Create());
+            var crawler = new WebCrawlerBloomFilter(filter);
+            crawler.Rastrear(_urls);
+        }
+
+        [Benchmark]
+        public void Bloom_Djb2()
+        {
+            var filter = new Bloom.BloomFilter(ItemCount, hashAlgorithm: Djb2HashAlgorithm.Create());
+            var crawler = new WebCrawlerBloomFilter(filter);
+            crawler.Rastrear(_urls);
+        }
+
+        [Benchmark]
+        public void Bloom_Fnv1a()
+        {
+            var filter = new Bloom.BloomFilter(ItemCount, hashAlgorithm: Fnv1aHashAlgorithm.Create());
+            var crawler = new WebCrawlerBloomFilter(filter);
+            crawler.Rastrear(_urls);
+        }
+
+        [Benchmark]
+        public void Couting_Murmur()
         {
             var filter = new CountingBloomFilter(ItemCount, hashAlgorithm: MurmurHashAlgorithm.Create());
-            var crawler = new WebCrawlerSolucao(filter);
+            var crawler = new WebCrawlerCounting(filter);
             crawler.Rastrear(_urls);
         }
 
         [Benchmark]
-        public void Djb2()
+        public void Counting_Djb2()
         {
             var filter = new CountingBloomFilter(ItemCount, hashAlgorithm: Djb2HashAlgorithm.Create());
-            var crawler = new WebCrawlerSolucao(filter);
+            var crawler = new WebCrawlerCounting(filter);
             crawler.Rastrear(_urls);
         }
 
         [Benchmark]
-        public void Fnv1a()
+        public void Counting_Fnv1a()
         {
             var filter = new CountingBloomFilter(ItemCount, hashAlgorithm: Fnv1aHashAlgorithm.Create());
-            var crawler = new WebCrawlerSolucao(filter);
+            var crawler = new WebCrawlerCounting(filter);
             crawler.Rastrear(_urls);
         }
     }

@@ -3,7 +3,7 @@ using WebCrawler;
 
 namespace BloomFilterTests
 {
-    public class BloomFilterTest
+    public class CountingBloomFilterTest
     {
         [Fact]
         public void Should_FalsePositive_Be_Lower_Than_1_Percent()

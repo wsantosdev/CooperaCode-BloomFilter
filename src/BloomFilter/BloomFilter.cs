@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BloomFilter
 {
-    public sealed class CountingBloomFilter
+    public sealed class BloomFilter
     {
-        private readonly byte[] _counts;
+        private readonly BitArray _bitArray;
         private readonly uint _size;
         private readonly int _hashCount;
         private readonly IHashAlgorithm _hashAlgorithm;
 
-        public CountingBloomFilter(int expectedItems = 1, 
-                                   int hashCount = 0, 
-                                   IHashAlgorithm? hashAlgorithm = null)
+        public BloomFilter(int expectedItems = 1, 
+                          int hashCount = 0, 
+                          IHashAlgorithm? hashAlgorithm = null)
         {
             _size = (uint)BloomFilterOptimizer.OptimalSize(expectedItems, 0.01);
-            _counts = GC.AllocateUninitializedArray<byte>((int)_size);
+            _bitArray = new BitArray((int)_size);
             _hashCount = hashCount > 0 ? hashCount : BloomFilterOptimizer.OptimalHashes(expectedItems, _size);
             _hashAlgorithm = hashAlgorithm ?? MurmurHashAlgorithm.Create();
         }
@@ -26,26 +27,11 @@ namespace BloomFilter
         public void Add(string item)
         {
             var (hash1, hash2) = ComputeDoubleHash(item);
-            ref byte countsRef = ref _counts[0];
             
             for (int i = 0; i < _hashCount; i++)
             {
                 uint index = (hash1 + (uint)i * hash2) % _size;
-                Unsafe.Add(ref countsRef, index)++;
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Remove(string item)
-        {
-            var (hash1, hash2) = ComputeDoubleHash(item);
-            ref byte countsRef = ref _counts[0];
-                        
-            for (int i = 0; i < _hashCount; i++)
-            {
-                uint index = (hash1 + (uint)i * hash2) % _size;
-                ref byte count = ref Unsafe.Add(ref countsRef, index);
-                if (count > 0) count--;
+                _bitArray.Set((int)index, true);
             }
         }
 
@@ -53,12 +39,11 @@ namespace BloomFilter
         public bool ProbablyContains(string item)
         {
             var (hash1, hash2) = ComputeDoubleHash(item);
-            ref byte countsRef = ref _counts[0];
             
             for (int i = 0; i < _hashCount; i++)
             {
                 uint index = (hash1 + (uint)i * hash2) % _size;
-                if (Unsafe.Add(ref countsRef, index) == 0)
+                if (!_bitArray.Get((int)index))
                     return false;
             }
 
@@ -94,6 +79,9 @@ namespace BloomFilter
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private (uint hash1, uint hash2) ComputeHashPair(ref ReadOnlySpan<byte> data)
         {
+            // Double hashing: usa o mesmo algoritmo com seeds diferentes
+            // hash1: seed = 0
+            // hash2: seed baseado no próprio hash1 para independência
             uint hash1 = _hashAlgorithm.Hash(ref data);
             
             // Garante que hash2 nunca seja zero (evita repetição de índices)

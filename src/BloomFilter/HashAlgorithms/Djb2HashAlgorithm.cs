@@ -4,6 +4,8 @@ namespace BloomFilter
 {
     public sealed class Djb2HashAlgorithm : IHashAlgorithm
     {
+        private Djb2HashAlgorithm() { }
+
         public uint Hash(ref ReadOnlySpan<byte> bytes)
         {
             uint hash = 5381;
