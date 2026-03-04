@@ -11,7 +11,7 @@ namespace BloomFilterTests
             //Arrange
             int itemCount = 10_000;
             var filter = new CountingBloomFilter(itemCount, 3, MurmurHashAlgorithm.Create());
-            var crawler = new WebCrawlerSolucao(filter);
+            var crawler = new WebCrawlerCounting(filter);
             crawler.Rastrear(UrlGenerator.Generate(itemCount));
 
             int absentItemCount = 100_000;
@@ -40,7 +40,7 @@ namespace BloomFilterTests
             var urls = UrlGenerator.Generate(itemCount);
 
             var filter = new CountingBloomFilter(itemCount, 3, MurmurHashAlgorithm.Create());
-            var crawler = new WebCrawlerSolucao(filter);
+            var crawler = new WebCrawlerCounting(filter);
             crawler.Rastrear(urls);
 
             //Act
@@ -61,7 +61,7 @@ namespace BloomFilterTests
             int itemCount = 100_000;
             var urls = UrlGenerator.Generate(itemCount);
             var crawlerProblema = new WebCrawlerProblema();
-            var crawlerSolucao = new WebCrawlerSolucao(new CountingBloomFilter(itemCount, 3, MurmurHashAlgorithm.Create()));
+            var crawlerSolucao = new WebCrawlerCounting(new CountingBloomFilter(itemCount, 3, MurmurHashAlgorithm.Create()));
 
             //Assert
             long atual = GC.GetAllocatedBytesForCurrentThread();
